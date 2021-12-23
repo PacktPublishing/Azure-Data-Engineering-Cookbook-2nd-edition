@@ -44,7 +44,6 @@ If($uploadfiles -eq $true)
 	}
 }
 
-# Get storage account key. It's used in creating Data factory linked service.
-Get-AzStorageAccountKey -ResourceGroupName $resourcegroupname -Name $storageaccountname
+
 
 
