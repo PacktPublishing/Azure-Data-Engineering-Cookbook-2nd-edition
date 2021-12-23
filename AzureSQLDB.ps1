@@ -1,0 +1,10 @@
+$resourcegroup="PacktADEADF"
+$serverName = "packadeadfsql"
+$adminSqlLogin = "sqladmin"
+$password = "SQLPwdW5!k"
+$startIp = "0.0.0.0"
+$endIp = "255.255.255.255"
+$databasename = "sample"
+$server = New-AzSqlServer -ResourceGroupName $resourcegroup -ServerName $serverName -Location "Eastus" -SqlAdministratorCredentials $(New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $adminSqlLogin, $(ConvertTo-SecureString -String $password -AsPlainText -Force))
+$serverFirewallRule = New-AzSqlServerFirewallRule -ResourceGroupName $resourcegroup -ServerName $serverName -FirewallRuleName "AllowedIPs" -StartIpAddress $startIp -EndIpAddress $endIp
+$database = New-AzSqlDatabase  -ResourceGroupName $resourcegroup -ServerName $serverName -DatabaseName $databaseName -RequestedServiceObjectiveName "S0"
