@@ -53,3 +53,13 @@ GO
 select ProductID from SalesLT.SalesOrderDetail where OrderQty > 2
 GO
 select ProductID from SalesLT.SalesOrderDetail where OrderQty >= 2 and UnitPrice>1
+GO
+Declare @id int
+SET @id = 1
+
+While @id <=1000
+Begin
+Select count(*),sod.productid From  [SalesLT].[Product] CROSS JOIN SalesLT.SalesOrderDetail sod CROSS JOIN [SalesLT].[SalesOrderDetail] GROUP BY sod.productid Order by count(*) desc
+SET @id = @id + 1
+END
+GO
