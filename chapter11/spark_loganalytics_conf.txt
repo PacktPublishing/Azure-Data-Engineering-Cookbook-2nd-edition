@@ -1,0 +1,3 @@
+spark.synapse.logAnalytics.enabled true
+spark.synapse.logAnalytics.workspaceId 
+spark.synapse.logAnalytics.secret 
