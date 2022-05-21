@@ -1,0 +1,12 @@
+let Start_Time = datetime(2022-05-20 13:50:00);
+let End_Time = datetime(2022-05-20 17:00:00);
+let DatabaseName = "packtadesqlpool"
+SynapseSqlPoolExecRequests 
+| where TimeGenerated    between (Start_Time ..Start_Time) and StartTime between (datetime(2000-05-20)..TimeGenerated)
+| where Label !="health_checker"
+| where Status contains "Running" 
+| where _ResourceId endsWith DatabaseName  
+| extend duration_sec = datetime_diff("second", TimeGenerated,StartTime) 
+| summarize duration_sec = max(duration_sec), Command = any(Command),Label = any(Label),ResourceClass = any(ResourceClass),QueryPlan = any(ExplainOutput),Status = any(Status),Source = any(SourceSystem) by RequestId
+| order by max_duration_sec
+| limit 10

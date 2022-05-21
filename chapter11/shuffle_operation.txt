@@ -1,0 +1,12 @@
+let ShuffleData = 
+    SparkMetrics_CL
+| where workspaceName_s == "packatadesynapse" and clusterName_s == "sparkpool" 
+| where name_s contains_cs  "shuffle" and ( name_s contains_cs  "shuffleTotalBytesRead" or name_s contains_cs  "executor.shuffleBytesWritten" )
+| extend shuffleoperation = case(name_s contains_cs  "shuffleTotalBytesRead","shuffleTotalBytesRead","shuffleBytesWritten")
+| summarize sum(count_d) by TimeGenerated, applicationName_s,name_s,shuffleoperation
+| project applicationName_s,shuffleoperation,TimeGenerated, sum_count_d;
+
+ShuffleData
+| summarize max(sum_count_d) by bin(TimeGenerated,10m),applicationName_s,shuffleoperation
+| sort by max_sum_count_d desc 
+| limit  10

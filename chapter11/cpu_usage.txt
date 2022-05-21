@@ -1,0 +1,12 @@
+let CpuData = 
+SparkMetrics_CL
+| where workspaceName_s == "packtadesynapse" and clusterName_s == "packtsparkpool" 
+| where name_s contains_cs "executor.cpuTime" 
+| extend cputime = count_d / 1000000
+| summarize sum(cputime) by TimeGenerated,applicationName_s;
+
+CpuData
+| summarize cpu_time_ms = max(sum_cputime) by bin(TimeGenerated,10m),applicationName_s
+| sort by cpu_time_ms desc
+| project  applicationName_s,cpu_time_ms,bin(TimeGenerated,10m) 
+| limit  10
